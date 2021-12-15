@@ -1,2 +1,5 @@
-Add context API and add all the colors for all pokemon types
 Shares stack navigation for search bar and start making search listing page on click search bracket
+Search feature
+Filters feature
+Card Details feature
+Bookmarks with local storage feature

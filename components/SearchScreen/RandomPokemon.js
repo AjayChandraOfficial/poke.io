@@ -2,22 +2,32 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { SvgUri } from "react-native-svg";
 import SkeletonContent from "react-native-skeleton-content";
+
+import pokemonContext from "../../store/pokemon-context";
+import { useContext } from "react";
+
 // Fetch a random pokemon using Math.random() for id between 1-1000
 export default function RandomPokemon() {
+  const pokemonCtx = useContext(pokemonContext);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const [randomPokemondData, setRandomPokemonData] = useState();
   const fetchRandomPokemon = async () => {
     setIsLoading(true);
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 801)}`
-    );
-    const data = await response.json();
-
-    if (data.sprites.other["dream_world"]["front_default"] === null) {
-      fetchRandomPokemon();
+    try {
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 801)}`
+      );
+      const data = await response.json();
+      if (!data) throw new Error("Something went wrong");
+      if (data.sprites.other["dream_world"]["front_default"] === null) {
+        fetchRandomPokemon();
+      }
+      setRandomPokemonData(data);
+      setIsLoading(false);
+    } catch (e) {
+      setHasError(e.message);
     }
-    setRandomPokemonData(data);
-    setIsLoading(false);
   };
   useEffect(() => {
     fetchRandomPokemon();
@@ -28,7 +38,7 @@ export default function RandomPokemon() {
         style={{
           fontFamily: "Rubik-Medium",
           fontSize: 18,
-          color: "#C8CCDA",
+          color: pokemonCtx.allColors.textColor,
           marginBottom: 12,
           marginTop: 130,
         }}
@@ -42,7 +52,7 @@ export default function RandomPokemon() {
           containerStyle={{
             flex: 1,
             width: "100%",
-            height: 120,
+            height: 130,
             borderRadius: 15,
           }}
           animationDirection="horizontalLeft"
@@ -70,6 +80,7 @@ export default function RandomPokemon() {
 }
 
 const PokemonCard = ({ data }) => {
+  const pokemonCtx = useContext(pokemonContext);
   const filterString = (str) => {
     if (str.includes("-")) {
       const firstWord = str.split("-")[0];
@@ -79,12 +90,15 @@ const PokemonCard = ({ data }) => {
     const remainingLetters = str.slice(1);
     return firstLetter + remainingLetters;
   };
+
   return (
     <View
       style={{
         width: "100%",
         height: 120,
-        backgroundColor: "#4C9AA5", //Change background color according to the type of pokemon
+        backgroundColor: data.types[0].type.name
+          ? pokemonCtx.allColors.types[data.types[0].type.name]["light"]
+          : pokemonCtx.allColors.textColor, //Change background color according to the type of pokemon
         borderRadius: 16,
         flexDirection: "row",
         justifyContent: "flex-end",
@@ -131,7 +145,9 @@ const PokemonCard = ({ data }) => {
                 paddingVertical: 5,
                 borderRadius: 50,
                 marginTop: 5,
-                backgroundColor: "#2A6B74",
+                backgroundColor: data.types[0].type.name
+                  ? pokemonCtx.allColors.types[data.types[0].type.name]["dark"]
+                  : pokemonCtx.allColors.backgroundColor, //Change texxt color dynamiucally here
               }}
             >
               {filterString(data.types[0].type.name)}

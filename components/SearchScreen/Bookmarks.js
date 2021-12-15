@@ -1,7 +1,10 @@
 import React from "react";
 import { View, Text, Touchable, TouchableOpacity } from "react-native";
 import Foundation from "react-native-vector-icons/Foundation";
+import pokemonContext from "../../store/pokemon-context";
+import { useContext } from "react";
 export default function Bookmarks() {
+  const pokemonCtx = useContext(pokemonContext);
   return (
     <View>
       <TouchableOpacity
@@ -13,7 +16,7 @@ export default function Bookmarks() {
           style={{
             fontFamily: "Rubik-Medium",
             fontSize: 18,
-            color: "#C8CCDA",
+            color: pokemonCtx.allColors.textColor,
             marginLeft: 12,
           }}
         >

@@ -2,30 +2,18 @@ import React from "react";
 import { View, Text } from "react-native";
 import { TextInput } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import Foundation from "react-native-vector-icons/Foundation";
 import pokemonContext from "../../store/pokemon-context";
 import { useContext } from "react";
-import { useEffect } from "react";
-//When user starts typin change the screen using navigation.navigate, Test by passing route value and then using it in the other compoent, use shared stacks screen navigator as
 
-//Autfocus still needs to be implemented
 export default function SearchBanner() {
   const pokemonCtx = useContext(pokemonContext);
 
-  useEffect(() => {}, []);
   return (
-    <View style={{ marginTop: 120 }}>
-      <Text
-        style={{
-          fontFamily: "Rubik-Medium",
-          fontSize: 18,
-          color: pokemonCtx.allColors.textColor,
-          marginVertical: 12,
-        }}
-      >
-        Search Pokemon
-      </Text>
+    <View>
       <View>
         <TextInput
+          autoFocus={true}
           spellCheck={false}
           selectionColor="#8C8C8C"
           placeholder="Search by name, ability"
@@ -43,6 +31,32 @@ export default function SearchBanner() {
           size={20}
           color="#323232"
           style={{ position: "absolute", left: 10, top: 9 }}
+        />
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          alignSelf: "flex-end",
+          marginTop: 17,
+          marginRight: 15,
+        }}
+      >
+        {/* Add touchable opacity and navigate to filters page on Press */}
+        <Text
+          style={{
+            color: pokemonCtx.allColors.textColor,
+            fontFamily: "Rubik-Regular",
+            fontSize: 16,
+            marginRight: 10,
+          }}
+        >
+          Filters
+        </Text>
+        <Foundation
+          name="filter"
+          size={20}
+          color={pokemonCtx.allColors.textColor}
         />
       </View>
     </View>
