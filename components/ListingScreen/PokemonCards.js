@@ -54,6 +54,15 @@ export default function PokemonCards() {
   const renderItem = ({ item }) => {
     return <PokemonCard data={item} key={item.id} />;
   };
+
+  const moreDataLoaderComponent = () => (
+    <LottieView
+      source={require("../../assets/animations/lf30_editor_gtcrnw7k.json")}
+      autoPlay
+      loop
+      style={{ height: 100, width: 100 }}
+    />
+  );
   return (
     <>
       <View>
@@ -72,10 +81,11 @@ export default function PokemonCards() {
             onEndReached={({ distanceFromEnd }) => {
               loadMoreData();
             }}
+            renderFooter={moreDataLoaderComponent}
           />
         )}
       </View>
-      {/*Add Loading Animation here */}
+      {/* Add Loading Animation here
       {loadingMoreData && (
         <Text
           style={{
@@ -90,7 +100,7 @@ export default function PokemonCards() {
         >
           Loading...
         </Text>
-      )}
+      )} */}
     </>
   );
 }

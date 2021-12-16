@@ -9,7 +9,7 @@ import Entypo from "react-native-vector-icons/Entypo";
 import { useContext } from "react";
 import pokemonContext from "../store/pokemon-context";
 
-export default function SearchScreen() {
+export default function SearchScreen({ navigation }) {
   const pokemonCtx = useContext(pokemonContext);
 
   return (
@@ -31,7 +31,7 @@ export default function SearchScreen() {
         <Bookmarks />
         <BrandingLogo />
       </View>
-      <SearchBanner />
+      <SearchBanner navigation={navigation} />
       <RandomPokemon />
       <View
         style={{

@@ -1,10 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 import SearchScreen from "./screens/SearchScreen";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { PokemonContextProvider } from "./store/pokemon-context";
 import ListingScreen from "./screens/ListingScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { TransitionPresets } from "@react-navigation/stack";
 export default function App() {
   const [allFontsLoaded] = useFonts({
     "Rubik-Regular": require("./assets/fonts/Rubik-Regular.ttf"),
@@ -14,9 +16,27 @@ export default function App() {
   });
 
   if (!allFontsLoaded) return <AppLoading />;
+
+  const Stack = createStackNavigator();
   return (
     <PokemonContextProvider>
-      <ListingScreen />
+      <NavigationContainer
+        theme={{
+          colors: {
+            background: "#0D1323",
+          },
+        }}
+      >
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+            ...TransitionPresets.FadeFromBottomAndroid,
+          }}
+        >
+          <Stack.Screen name="Search Screen" component={SearchScreen} />
+          <Stack.Screen name="ListingPage" component={ListingScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </PokemonContextProvider>
   );
 }
