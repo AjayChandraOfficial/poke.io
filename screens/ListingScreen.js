@@ -7,32 +7,12 @@ import PokemonCards from "../components/ListingScreen/PokemonCards";
 import pokemonContext from "../store/pokemon-context";
 export default function ListingScreen(props) {
   const pokemonCtx = useContext(pokemonContext);
+  const [filteredData, setFilteredData] = useState();
 
-  // useEffect(() => {
-  //   if (pokemonCtx.filteredSearchData) {
-  //     const loadData = async () => {
-  //       try {
-  //         setLoading(true);
-
-  //         const individualData =
-  //           await pokemonCtx.fetchIndividualFilteredPokemons(
-  //             pokemonCtx.filteredSearchData
-  //           );
-  //         // console.log(individualData);
-  //         setLoading(false);
-  //         if (individualData) {
-  //           setFilteredSearchData(individualData);
-  //         }
-  //       } catch (e) {
-  //         console.log(e.message);
-  //         setHasError(true);
-  //       }
-  //     };
-  //     loadData();
-  //   }
-  // }, [pokemonCtx.filteredSearchData]);
-
-  // console.log(filteredSearchData);
+  const filteredDataHandler = (data = undefined) => {
+    setFilteredData(data);
+  };
+  console.log(filteredData);
   return (
     <View
       style={{
@@ -42,9 +22,13 @@ export default function ListingScreen(props) {
         backgroundColor: pokemonCtx.allColors.backgroundColor,
       }}
     >
-      <SearchBanner item={props.route.params.item} />
+      <SearchBanner
+        item={props.route.params.item}
+        navigation={props.navigation}
+        filteredDataHandler={filteredDataHandler}
+      />
       <View style={{ marginTop: 20 }}>
-        <PokemonCards />
+        <PokemonCards filteredData={filteredData} />
       </View>
       <StatusBar style="light" />
     </View>

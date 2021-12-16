@@ -8,6 +8,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { TransitionPresets } from "@react-navigation/stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
+import FiltersScreen from "./screens/FiltersScreen";
 export default function App() {
   const [allFontsLoaded] = useFonts({
     "Rubik-Regular": require("./assets/fonts/Rubik-Regular.ttf"),
@@ -46,6 +47,11 @@ export default function App() {
             sharedElements={(route) => {
               return [route.params.item.id];
             }}
+          />
+          <Stack.Screen
+            name="FiltersScreen"
+            component={FiltersScreen}
+            options={{ ...TransitionPresets.FadeFromBottomAndroid }}
           />
         </Stack.Navigator>
       </NavigationContainer>

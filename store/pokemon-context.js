@@ -14,9 +14,6 @@ const pokemonContext = createContext({
 export const PokemonContextProvider = ({ children }) => {
   const maxPokemons = 898;
   const [allPokemonsData, setAllPokemonsData] = useState();
-  const [filteredSearchData, setFilteredSearchData] = useState(["Something"]);
-
-  useState();
 
   //Edit all the colors here
   const allColors = {
@@ -130,23 +127,22 @@ export const PokemonContextProvider = ({ children }) => {
     fetchAllPokemonData();
   }, []);
 
-  const userSearchInputHandler = (value) => {
-    if (!value) setFilteredSearchData(null);
-    if (allPokemonsData && value) {
-      setFilteredSearchData(
-        allPokemonsData.filter((item) => item.name.startsWith(value))
+  const filterDataFromAllPokemons = (value) => {
+    if (allPokemonsData) {
+      // return "I will run after 1 seconds";
+      return allPokemonsData.filter((item) =>
+        item.name.startsWith(value.toLowerCase())
       );
     }
   };
 
   const pokemonContextValue = {
-    allColors: allColors,
-    fetchPokemonsWithLimitOffset: fetchPokemonsWithLimitOffset,
-    fetchIndividualPokemons: fetchIndividualPokemons,
-    allPokemonsData: allPokemonsData,
-    userSearchInputHandler: userSearchInputHandler,
-    filteredSearchData: filteredSearchData,
-    fetchIndividualFilteredPokemons: fetchIndividualFilteredPokemons,
+    allColors: allColors, //All colors used in the app
+    fetchPokemonsWithLimitOffset: fetchPokemonsWithLimitOffset, //Fetches from api with limit and offset
+    fetchIndividualPokemons: fetchIndividualPokemons, //Fetches data of individual pokemons from an array
+    allPokemonsData: allPokemonsData, //Array containing all the pokemons names and url
+    filterDataFromAllPokemons: filterDataFromAllPokemons, //Filters from all pokemons based on substring
+    fetchIndividualFilteredPokemons: fetchIndividualFilteredPokemons, //Fetches data of individual filtered pokemons from an array
   };
 
   return (
@@ -157,27 +153,3 @@ export const PokemonContextProvider = ({ children }) => {
 };
 
 export default pokemonContext;
-
-// const allColors = {
-//     backgroundColor: "#0D1323",
-//     textColor: "#C8CCDA",
-//     lightModeTextColor: "#0D1323",
-//     lightModeBackgroundColor: "#C8CCDA",
-//   };
-
-// async function fetchTopHeadlinesAsyncAwait() {
-//   let response = await fetch(TOP_STORIES);
-//   let storyIds = await response.json();
-
-//   for (let storyId of storyIds) {
-//     console.log(storyId);
-//     let storyDetailsURL = `someurl/er/tg/${storyId}.json?print=pretty`;
-//     try {
-//       let response = await fetch(storyDetailsURL);
-//       let story = await response.json();
-//       displayStory(story);
-//     } catch (err) {
-//       displayStory("An error occurred while fetching this story.");
-//     }
-//   }
-// }

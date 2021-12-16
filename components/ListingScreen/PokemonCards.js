@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import pokemonContext from "../../store/pokemon-context";
 import LottieView from "lottie-react-native";
 import * as Animatable from "react-native-animatable";
+import PokeioLogoSvg from "../SearchScreen/PokeioLogoSvg";
 export default function PokemonCards(props) {
   const pokemonCtx = useContext(pokemonContext);
   const [pokemonData, setPokemonData] = useState();
@@ -12,6 +13,7 @@ export default function PokemonCards(props) {
   const [hasError, setHasError] = useState(false);
   const [nextFetch, setNextFetch] = useState();
   const [loadingMoreData, setLoadingMoreData] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,42 +57,21 @@ export default function PokemonCards(props) {
   const renderItem = ({ item, index }) => {
     return <PokemonCard data={item} index={index} key={item.id} />;
   };
+  const transformedData = () => {
+    if (!props.filteredData) return;
+    return props.filteredData.length > 20
+      ? props.filteredData.slice(0, 20)
+      : props.filteredData;
+  };
 
   return (
     <>
       <View>
         {hasError && <Error>Something went wrong, Please try again</Error>}
-        {!isLoading &&
-          pokemonData &&
-          !hasError &&
-          !pokemonCtx.filteredSearchData && (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={pokemonData}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id}
-              key={2}
-              numColumns={2}
-              columnWrapperStyle={{ justifyContent: "space-between" }}
-              contentContainerStyle={{ paddingBottom: 80 }}
-              onEndReachedThreshold={0}
-              onEndReached={({ distanceFromEnd }) => {
-                if (loadingMoreData === false) {
-                  loadMoreData();
-                }
-              }}
-              removeClippedSubviews={true}
-              // ListFooterComponent={() => moreDataLoaderComponent()}
-            />
-          )}
-        {pokemonCtx.filteredSearchData && (
-          <Text style={{ color: "white" }}>Filtered Data foes here</Text> // ListFooterComponent={() => moreDataLoaderComponent()}
-        )}
-
-        {/* {pokemonCtx.userTyping && (
+        {!isLoading && pokemonData && !hasError && !props.filteredData && (
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={props.filteredSearchData}
+            data={pokemonData}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             key={2}
@@ -106,15 +87,50 @@ export default function PokemonCards(props) {
             removeClippedSubviews={true}
             // ListFooterComponent={() => moreDataLoaderComponent()}
           />
+        )}
+        {/* {pokemonCtx.filteredSearchData && (
+          <Text style={{ color: "white" }}>Filtered Data foes here</Text> // ListFooterComponent={() => moreDataLoaderComponent()}
         )} */}
+
+        {props.filteredData && props.filteredData.length >= 1 && (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={transformedData()}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            key={2}
+            numColumns={2}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            contentContainerStyle={{ paddingBottom: 80 }}
+            onEndReachedThreshold={0}
+          />
+        )}
+        {props.filteredData && props.filteredData.length === 0 && (
+          <Animatable.View
+            animation="bounceIn"
+            style={{ width: "100%", alignItems: "center", marginTop: 130 }}
+          >
+            <PokeioLogoSvg />
+            <Text
+              style={{
+                color: pokemonCtx.allColors.textColor,
+                fontFamily: "Rubik-SemiBold",
+                fontSize: 16,
+                marginTop: 23,
+              }}
+            >
+              No Pokemons found
+            </Text>
+          </Animatable.View>
+        )}
       </View>
-      {/* Add Loading Animation here
+      {/* Add Loading Animation here */}
       {loadingMoreData && (
         <Text
           style={{
             position: "absolute",
             left: 30,
-            bottom: 60,
+            bottom: 25,
             color: "white",
             fontFamily: "Rubik-SemiBold",
             fontSize: 16,
@@ -123,7 +139,7 @@ export default function PokemonCards(props) {
         >
           Loading...
         </Text>
-      )} */}
+      )}
     </>
   );
 }
@@ -142,6 +158,7 @@ const PokemonCard = ({ data, index }) => {
     return firstLetter + remainingLetters;
   };
   // Add card animations here
+
   return (
     <Animatable.View
       style={{

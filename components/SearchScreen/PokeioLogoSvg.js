@@ -3,7 +3,7 @@ import Svg, { Path } from "react-native-svg";
 
 const PokeioLogoSvg = (props) => (
   <Svg
-    width={121}
+    width={131}
     height={40}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
