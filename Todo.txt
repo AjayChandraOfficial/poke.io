@@ -1,4 +1,4 @@
-Shares stack navigation for search bar and start making search listing page on click search bracket
+Add loading animatiojn on pokemon cards
 Search feature
 Filters feature
 Card Details feature

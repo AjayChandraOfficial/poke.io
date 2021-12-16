@@ -7,6 +7,7 @@ import ListingScreen from "./screens/ListingScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { TransitionPresets } from "@react-navigation/stack";
+import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 export default function App() {
   const [allFontsLoaded] = useFonts({
     "Rubik-Regular": require("./assets/fonts/Rubik-Regular.ttf"),
@@ -17,7 +18,7 @@ export default function App() {
 
   if (!allFontsLoaded) return <AppLoading />;
 
-  const Stack = createStackNavigator();
+  const Stack = createSharedElementStackNavigator();
   return (
     <PokemonContextProvider>
       <NavigationContainer
@@ -30,11 +31,22 @@ export default function App() {
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
-            ...TransitionPresets.FadeFromBottomAndroid,
           }}
+          // initialRouteName="Search Screen"
         >
-          <Stack.Screen name="Search Screen" component={SearchScreen} />
-          <Stack.Screen name="ListingPage" component={ListingScreen} />
+          <Stack.Screen
+            name="Search Screen"
+            component={SearchScreen}
+            options={{ ...TransitionPresets.FadeFromBottomAndroid }}
+          />
+          <Stack.Screen
+            name="ListingPage"
+            component={ListingScreen}
+            options={{ ...TransitionPresets.FadeFromBottomAndroid }}
+            sharedElements={(route) => {
+              return [route.params.item.id];
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </PokemonContextProvider>

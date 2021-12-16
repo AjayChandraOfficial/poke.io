@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createContext, useState } from "react";
 
 const pokemonContext = createContext({
   allColors: {},
   fetchPokemonsWithLimitOffset(limit, offset) {},
   fetchIndividualPokemons(arr) {},
+  setUserTypingCharacter(value) {},
+  userTyping: false,
+  allPokemonsData: {},
+  filteredSearchData: [],
 });
 
 export const PokemonContextProvider = ({ children }) => {
-  const [pokemonData, setPokemonData] = useState();
+  const maxPokemons = 898;
+  const [allPokemonsData, setAllPokemonsData] = useState();
+  const [filteredSearchData, setFilteredSearchData] = useState(["Something"]);
+
+  useState();
+
   //Edit all the colors here
   const allColors = {
     backgroundColor: "#0D1323",
@@ -62,8 +71,10 @@ export const PokemonContextProvider = ({ children }) => {
   //Need array of results
   const fetchIndividualPokemons = async (arr) => {
     let dataArray = [];
+
     for (let item of arr.results) {
       let url = item.url;
+
       try {
         let response = await fetch(url);
         let data = await response.json();
@@ -81,10 +92,61 @@ export const PokemonContextProvider = ({ children }) => {
     return dataArray;
   };
 
+  const fetchIndividualFilteredPokemons = async (arr) => {
+    let dataArray = [];
+
+    for (let item of arr) {
+      let url = item.url;
+
+      try {
+        let response = await fetch(url);
+        let data = await response.json();
+        dataArray.push({
+          id: data.order,
+          type: data.types,
+          name: data.species.name,
+          uri: data.sprites.other["dream_world"]["front_default"],
+          png: data.sprites.other["official-artwork"]["front_default"],
+        });
+      } catch (e) {
+        return e.message;
+      }
+    }
+    return dataArray;
+  };
+  useEffect(() => {
+    const fetchAllPokemonData = async () => {
+      let url = `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=${maxPokemons}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (!data) throw new Error("Something went wrong");
+        setAllPokemonsData(data.results);
+      } catch (e) {
+        return e.message;
+      }
+    };
+    fetchAllPokemonData();
+  }, []);
+
+  const userSearchInputHandler = (value) => {
+    if (!value) setFilteredSearchData(null);
+    if (allPokemonsData && value) {
+      setFilteredSearchData(
+        allPokemonsData.filter((item) => item.name.startsWith(value))
+      );
+    }
+  };
+
   const pokemonContextValue = {
     allColors: allColors,
     fetchPokemonsWithLimitOffset: fetchPokemonsWithLimitOffset,
     fetchIndividualPokemons: fetchIndividualPokemons,
+    allPokemonsData: allPokemonsData,
+    userSearchInputHandler: userSearchInputHandler,
+    filteredSearchData: filteredSearchData,
+    fetchIndividualFilteredPokemons: fetchIndividualFilteredPokemons,
   };
 
   return (
