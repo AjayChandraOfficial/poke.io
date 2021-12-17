@@ -12,6 +12,7 @@ import { createSharedElementStackNavigator } from "react-navigation-shared-eleme
 import BookmarkScreen from "./screens/BookmarkScreen";
 import DetailsScreen from "./screens/DetailsScreen";
 import FiltersScreen from "./screens/FiltersScreen";
+import FiltersResultScreen from "./components/FiltersScreen/FiltersResultScreen";
 export default function App() {
   const [allFontsLoaded] = useFonts({
     "Rubik-Regular": require("./assets/fonts/Rubik-Regular.ttf"),
@@ -70,6 +71,11 @@ export default function App() {
           <Stack.Screen
             name="BrowseAll"
             component={BrowseAllScreen}
+            options={{ ...TransitionPresets.SlideFromRightIOS }}
+          />
+          <Stack.Screen
+            name="FiltersResultScreen"
+            component={FiltersResultScreen}
             options={{ ...TransitionPresets.SlideFromRightIOS }}
           />
         </Stack.Navigator>

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import SearchBanner from "../components/ListingScreen/SearchBanner";
 import { useContext, useEffect, useState } from "react";
@@ -25,7 +25,6 @@ export default function ListingScreen(props) {
       }}
     >
       <SearchBanner
-        item={props.route.params.item}
         navigation={props.navigation}
         filteredDataHandler={filteredDataHandler}
         isLoadingSearchHandler={isLoadingSearchHandler}

@@ -12,7 +12,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Foundation from "react-native-vector-icons/Foundation";
 import pokemonContext from "../../store/pokemon-context";
 import { useContext, useRef, useEffect } from "react";
-import { SharedElement } from "react-navigation-shared-element";
 import { useState } from "react";
 
 export default function SearchBanner({
@@ -54,7 +53,7 @@ export default function SearchBanner({
         };
         loadData();
       }
-    }, 300);
+    }, 400);
 
     return () => clearTimeout(inputThrottleTimer);
   }, [userInputValue]);
@@ -64,34 +63,33 @@ export default function SearchBanner({
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View>
-        <SharedElement id={item.id}>
-          <View>
-            <TextInput
-              // value={userInputValue}
-              returnKeyType="search"
-              autoFocus={true}
-              ref={inputRef}
-              spellCheck={false}
-              selectionColor="#8C8C8C"
-              onChangeText={setuserInputValue}
-              style={{
-                height: 40,
-                borderWidth: 1,
-                backgroundColor: "#C8CCDA",
-                borderRadius: 60,
-                paddingHorizontal: 40,
-                fontSize: 14,
-                fontFamily: "Rubik-Regular",
-              }}
-            />
-            <Ionicons
-              name="search-outline"
-              size={21}
-              color="#323232"
-              style={{ position: "absolute", left: 10, top: 8 }}
-            />
-          </View>
-        </SharedElement>
+        <View>
+          <TextInput
+            // value={userInputValue}
+            returnKeyType="search"
+            autoFocus={true}
+            ref={inputRef}
+            spellCheck={false}
+            selectionColor="#8C8C8C"
+            onChangeText={setuserInputValue}
+            style={{
+              height: 40,
+              borderWidth: 1,
+              backgroundColor: "#C8CCDA",
+              borderRadius: 60,
+              paddingHorizontal: 40,
+              fontSize: 14,
+              fontFamily: "Rubik-Regular",
+            }}
+          />
+          <Ionicons
+            name="search-outline"
+            size={21}
+            color="#323232"
+            style={{ position: "absolute", left: 10, top: 8 }}
+          />
+        </View>
+
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {

@@ -1,3 +1,5 @@
 
-
-
+test in android
+change splash
+build
+make video

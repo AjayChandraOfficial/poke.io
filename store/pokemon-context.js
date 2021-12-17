@@ -16,6 +16,7 @@ export const PokemonContextProvider = ({ children }) => {
   const maxPokemons = 898;
   const [allPokemonsData, setAllPokemonsData] = useState();
   const [allofflineData, setAllOfflineData] = useState(null);
+  const [filteredPagePokemonsData, setFilteredPagePokemonData] = useState();
 
   //Edit all the colors here
   const allColors = {
@@ -153,14 +154,176 @@ export const PokemonContextProvider = ({ children }) => {
   };
   const filterDataFromAllPokemons = (value) => {
     if (allPokemonsData) {
-      // return "I will run after 1 seconds";
       return allPokemonsData.filter((item) =>
         item.name.startsWith(value.toLowerCase())
       );
     }
   };
+  const transformNamestoObjects = (arr) => {
+    if (allPokemonsData) {
+      let data = [];
+      for (const item of arr) {
+        data.push(
+          allPokemonsData.filter((AllItem) => AllItem.name.includes(item))
+        );
+      }
+      return data.flat(1);
+    }
+  };
   const removeOfflineDataHandler = () => {
     getAllOfflineData();
+  };
+
+  const helper_NamesExtractorFromObject = (arrOfObject) =>
+    arrOfObject.map((item) => {
+      return item.name;
+    });
+  const getFilteredPagePokemonData = async (arr) => {
+    let dataTypeArray = [];
+    let dataEggArray = [];
+    let dataGenerationArray = [];
+    let dataColorArray = [];
+    let dataHabitatArray = [];
+    let dataShapeArray = [];
+
+    try {
+      for (let item of arr) {
+        // []
+        if (item.selectedData.length !== 0) {
+          for (let data of item.selectedData) {
+            let response = await fetch(item.url + data.name);
+            let responseJson = await response.json();
+            if (item.tag === "type") {
+              if (dataTypeArray.length === 0) {
+                dataTypeArray = responseJson[item.filterType].map((item) => {
+                  return item.pokemon.name;
+                });
+              } else if (dataTypeArray.length !== 0) {
+                dataTypeArray = [
+                  [...dataTypeArray],
+                  [
+                    ...responseJson[item.filterType].map((item) => {
+                      return item.pokemon.name;
+                    }),
+                  ],
+                ].reduce((prev, current) =>
+                  prev.filter((el) => current.includes(el))
+                );
+              }
+            } else if (item.tag === "egg") {
+              if (dataEggArray.length === 0)
+                dataEggArray = helper_NamesExtractorFromObject(
+                  responseJson[item.filterType]
+                );
+              else {
+                dataEggArray = [
+                  [...dataEggArray],
+                  [
+                    ...helper_NamesExtractorFromObject(
+                      responseJson[item.filterType]
+                    ),
+                  ],
+                ].reduce((prev, current) =>
+                  prev.filter((el) => current.includes(el))
+                );
+              }
+            } else if (item.tag === "generation") {
+              if (dataGenerationArray.length === 0)
+                dataGenerationArray = helper_NamesExtractorFromObject(
+                  responseJson[item.filterType]
+                );
+              else {
+                dataGenerationArray = [
+                  [...dataGenerationArray],
+                  [
+                    ...helper_NamesExtractorFromObject(
+                      responseJson[item.filterType]
+                    ),
+                  ],
+                ].reduce((prev, current) =>
+                  prev.filter((el) => current.includes(el))
+                );
+              }
+            } else if (item.tag === "color") {
+              if (dataColorArray.length === 0)
+                dataColorArray = helper_NamesExtractorFromObject(
+                  responseJson[item.filterType]
+                );
+              else {
+                dataColorArray = [
+                  [...dataColorArray],
+                  [
+                    ...helper_NamesExtractorFromObject(
+                      responseJson[item.filterType]
+                    ),
+                  ],
+                ].reduce((prev, current) =>
+                  prev.filter((el) => current.includes(el))
+                );
+              }
+            } else if (item.tag === "habitat") {
+              if (dataHabitatArray.length === 0)
+                dataHabitatArray = helper_NamesExtractorFromObject(
+                  responseJson[item.filterType]
+                );
+              else {
+                dataHabitatArray = [
+                  [...dataHabitatArray],
+                  [
+                    ...helper_NamesExtractorFromObject(
+                      responseJson[item.filterType]
+                    ),
+                  ],
+                ].reduce((prev, current) =>
+                  prev.filter((el) => current.includes(el))
+                );
+              }
+            } else if (item.tag === "shape") {
+              if (dataShapeArray.length === 0)
+                dataShapeArray = helper_NamesExtractorFromObject(
+                  responseJson[item.filterType]
+                );
+              else {
+                dataShapeArray = [
+                  [...dataShapeArray],
+                  [
+                    ...helper_NamesExtractorFromObject(
+                      responseJson[item.filterType]
+                    ),
+                  ],
+                ].reduce((prev, current) =>
+                  prev.filter((el) => current.includes(el))
+                );
+              }
+            }
+          }
+        }
+      }
+      const filteredArray = [
+        dataTypeArray,
+        dataEggArray,
+        dataGenerationArray,
+        dataColorArray,
+        dataHabitatArray,
+        dataShapeArray,
+      ].filter((item) => item.length !== 0);
+      // setFilteredPagePokemonData(
+      //   transformNamestoObjects(
+      //     [...filteredArray].reduce((prev, current) =>
+      //       prev.filter((el) => current.includes(el))
+      //     )
+      //   )
+      // );
+      if ([...filteredArray].length === 0) return 0;
+      return transformNamestoObjects(
+        [...filteredArray].reduce((prev, current) =>
+          prev.filter((el) => current.includes(el))
+        )
+      );
+      // console.log(allPokemonsData);
+    } catch (e) {
+      return 0;
+    }
   };
 
   const pokemonContextValue = {
@@ -174,6 +337,9 @@ export const PokemonContextProvider = ({ children }) => {
     getAllOfflineData: getAllOfflineData,
     allofflineData: allofflineData,
     removeOfflineDataHandler: removeOfflineDataHandler,
+
+    getFilteredPagePokemonData: getFilteredPagePokemonData, //data fetching for filter page
+    filteredPagePokemonsData: filteredPagePokemonsData,
   };
 
   return (

@@ -4,17 +4,24 @@ import LottieView from "lottie-react-native";
 import pokemonContext from "../../store/pokemon-context";
 import { useNavigation } from "@react-navigation/native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-export default function Content({ pressedDone }) {
+
+import * as Animatable from "react-native-animatable";
+
+import PokeioLogoSvg from "../SearchScreen/PokeioLogoSvg";
+
+export default function Content({ pressedDone, PressedDoneHandler }) {
   const [allFiters, setAllFilters] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
   const [typeCheckedData, setTypeCheckedData] = useState([]);
   const [eggCheckedData, setEggCheckedData] = useState([]);
   const [generationCheckedData, setGenerationCheckedData] = useState([]);
   const [colorCheckedData, setColorCheckedData] = useState([]);
   const [habitatCheckedData, setHabitatCheckedData] = useState([]);
   const [shapeCheckedData, setShapeCheckedData] = useState([]);
-
+  const [filteredPageData, setFilteredPageData] = useState();
+  const [filteredPagePokemonDataLoading, setFilteredPagePokemonDataLoading] =
+    useState();
+  const navigation = useNavigation();
   const categories = [
     "type",
     "egg-group",
@@ -67,17 +74,76 @@ export default function Content({ pressedDone }) {
     const remainingLetters = str.slice(1);
     return firstLetter + remainingLetters;
   };
+  const MakeObjectFromFiltersData = () => {
+    return [
+      {
+        url: "https://pokeapi.co/api/v2/type/",
+        selectedData: typeCheckedData,
+        filterType: "pokemon",
+        tag: "type",
+      },
+      {
+        url: "https://pokeapi.co/api/v2/egg-group/",
+        selectedData: eggCheckedData,
+        filterType: "pokemon_species",
+        tag: "egg",
+      },
+      {
+        url: "https://pokeapi.co/api/v2/generation/",
+        selectedData: generationCheckedData,
+        filterType: "pokemon_species",
+        tag: "generation",
+      },
+      {
+        url: "https://pokeapi.co/api/v2/pokemon-color/",
+        selectedData: colorCheckedData,
+        filterType: "pokemon_species",
+        tag: "color",
+      },
+      {
+        url: "https://pokeapi.co/api/v2/pokemon-habitat/",
+        selectedData: habitatCheckedData,
+        filterType: "pokemon_species",
+        tag: "habitat",
+      },
+      {
+        url: "https://pokeapi.co/api/v2/pokemon-shape/",
+        selectedData: shapeCheckedData,
+        filterType: "pokemon_species",
+        tag: "shape",
+      },
+    ];
+  };
 
-  if (pressedDone) {
-    console.log([
-      typeCheckedData,
-      eggCheckedData,
-      generationCheckedData,
-      colorCheckedData,
-      habitatCheckedData,
-      shapeCheckedData,
-    ]);
-  }
+  // if (pressedDone) {
+  //   pokemonCtx.getFilteredPagePokemonData(MakeObjectFromFiltersData());
+  // }
+  useEffect(() => {
+    if (filteredPageData)
+      navigation.navigate("FiltersResultScreen", {
+        filteredPageData: filteredPageData,
+      });
+  }, [filteredPageData]);
+  useEffect(() => {
+    if (pressedDone) {
+      const fetchFiltered = async () => {
+        PressedDoneHandler(false);
+        try {
+          // setFilteredPagePokemonDataLoading(true);
+          const filteredData = await pokemonCtx.getFilteredPagePokemonData(
+            MakeObjectFromFiltersData()
+          );
+          const filteredDataMoreInfo =
+            await pokemonCtx.fetchIndividualFilteredPokemons(filteredData);
+          // setFilteredPagePokemonDataLoading(false);
+          setFilteredPageData(filteredDataMoreInfo);
+        } catch (e) {
+          console.log(e.message);
+        }
+      };
+      fetchFiltered();
+    }
+  }, [pressedDone]);
   if (isLoading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -99,6 +165,7 @@ export default function Content({ pressedDone }) {
       </View>
     );
   }
+
   return (
     <View style={{ paddingHorizontal: 10, flex: 1 }}>
       <ScrollView

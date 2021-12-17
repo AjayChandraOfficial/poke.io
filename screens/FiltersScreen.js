@@ -10,13 +10,16 @@ import { useState } from "react";
 export default function FiltersScreen() {
   const pokemonCtx = useContext(pokemonContext);
   const [pressedDone, setPressedDone] = useState(false);
-  const PressedDoneHandler = () => {
-    setPressedDone(true);
+  const PressedDoneHandler = (value) => {
+    setPressedDone(value);
   };
   return (
     <View style={{ flex: 1, paddingHorizontal: 15, paddingTop: 60 }}>
       <Header PressedDoneHandler={PressedDoneHandler} />
-      <Content pressedDone={pressedDone} />
+      <Content
+        pressedDone={pressedDone}
+        PressedDoneHandler={PressedDoneHandler}
+      />
     </View>
   );
 }
@@ -31,14 +34,18 @@ const Header = ({ PressedDoneHandler }) => {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
+        paddingBottom: 10,
         // alignSelf: "center",
       }}
     >
       <TouchableOpacity
         onPress={() => {
-          navigation.goBack();
+          navigation.navigate("ListingPage");
         }}
-        style={{ flexDirection: "row", alignItems: "center" }}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+        }}
       >
         <Entypo
           name="chevron-thin-left"
@@ -58,7 +65,7 @@ const Header = ({ PressedDoneHandler }) => {
       </TouchableOpacity>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => PressedDoneHandler()}
+        onPress={() => PressedDoneHandler(true)}
       >
         <Text
           style={{

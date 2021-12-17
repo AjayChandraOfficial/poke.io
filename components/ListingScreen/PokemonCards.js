@@ -135,6 +135,7 @@ export default function PokemonCards(props) {
               onEndReachedThreshold={0}
             />
           )}
+
         {props.filteredData && props.filteredData.length === 0 && (
           <NoPokemonsFound />
         )}
