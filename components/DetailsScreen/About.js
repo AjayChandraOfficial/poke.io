@@ -28,6 +28,8 @@ export default function About({ data }) {
     return str.join(", ");
   };
   const eggExtractor = (arr) => {
+    if (arr === null || arr.length === 0) return "No Eggs";
+
     let str = [];
     for (const item of arr) {
       let a = filterString(item.name);
@@ -48,7 +50,7 @@ export default function About({ data }) {
     const fetchData = async () => {
       try {
         const dataResponse = await fetch(
-          `https://pokeapi.co/api/v2/pokemon-species/897/`
+          `https://pokeapi.co/api/v2/pokemon-species/${data.id}/`
         );
         const jsonData = await dataResponse.json();
         if (!dataResponse) throw new Error("Something went wrong");
@@ -64,7 +66,7 @@ export default function About({ data }) {
     if (eggInfoDataAPI)
       setEggInfoData([
         {
-          value: "egg",
+          value: eggExtractor(eggInfoDataAPI["egg_groups"]),
         },
         {
           value: eggInfoDataAPI.shape

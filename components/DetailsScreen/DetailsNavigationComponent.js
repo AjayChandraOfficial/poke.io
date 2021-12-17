@@ -60,8 +60,12 @@ export default function DetailsNavigationComponent({ data }) {
         <Tab.Screen name="About">
           {(props) => <About data={data} {...props} />}
         </Tab.Screen>
-        <Tab.Screen name="Stats" component={Stats} />
-        <Tab.Screen name="Moves" component={Moves} />
+        <Tab.Screen name="Stats">
+          {(props) => <Stats data={data} {...props} />}
+        </Tab.Screen>
+        <Tab.Screen name="Moves">
+          {(props) => <Moves data={data} {...props} />}
+        </Tab.Screen>
       </Tab.Navigator>
     </View>
   );

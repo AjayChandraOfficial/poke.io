@@ -41,14 +41,14 @@ export default function App() {
             name="Search Screen"
             component={SearchScreen}
             options={{ ...TransitionPresets.FadeFromBottomAndroid }}
+            // sharedElements={(route) => {
+            //   return [route.params.item.id];
+            // }}
           />
           <Stack.Screen
             name="ListingPage"
             component={ListingScreen}
             options={{ ...TransitionPresets.FadeFromBottomAndroid }}
-            // sharedElements={(route) => {
-            //   return [route.params.item.id];
-            // }}
           />
           <Stack.Screen
             name="FiltersScreen"
