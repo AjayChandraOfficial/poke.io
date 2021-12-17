@@ -8,6 +8,7 @@ import RandomPokemon from "../components/SearchScreen/RandomPokemon";
 import Entypo from "react-native-vector-icons/Entypo";
 import { useContext } from "react";
 import pokemonContext from "../store/pokemon-context";
+import { TouchableOpacity } from "react-native";
 
 export default function SearchScreen({ navigation }) {
   const pokemonCtx = useContext(pokemonContext);
@@ -33,7 +34,11 @@ export default function SearchScreen({ navigation }) {
       </View>
       <SearchBanner navigation={navigation} />
       <RandomPokemon />
-      <View
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("BrowseAll");
+        }}
+        activeOpacity={0.8}
         style={{
           alignSelf: "center",
           // marginTop: 110,
@@ -52,7 +57,7 @@ export default function SearchScreen({ navigation }) {
           Browse all Pokemons
         </Text>
         <Entypo name="chevron-right" size={18} color="#C8CCDA" />
-      </View>
+      </TouchableOpacity>
       <StatusBar style="light" />
     </View>
   );

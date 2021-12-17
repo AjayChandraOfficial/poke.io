@@ -31,7 +31,7 @@ export default function SearchBanner({ navigation }) {
             returnKeyType="search"
             spellCheck={false}
             selectionColor="#8C8C8C"
-            placeholder="Search by name, ability"
+            placeholder="Search by name"
             onFocus={() => navigation.push("ListingPage", { item })}
             style={{
               height: 40,

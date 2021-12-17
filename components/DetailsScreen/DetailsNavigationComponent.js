@@ -2,6 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
 import About from "./About";
 import Stats from "./Stats";
 import Moves from "./Moves";
@@ -48,7 +49,8 @@ export default function DetailsNavigationComponent({ data }) {
             borderTopRightRadius: 20,
           },
           tabBarIndicatorStyle: {
-            backgroundColor: "green",
+            backgroundColor:
+              pokemonCtx.allColors.types[data.types[0].type.name]["light"],
             height: 3,
             width: "18%",
             left: "7%",

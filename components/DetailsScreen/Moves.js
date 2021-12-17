@@ -20,7 +20,8 @@ export default function Moves({ data }) {
         color: "white",
         fontFamily: "Rubik-Regular",
         fontSize: 15,
-        backgroundColor: "#6AAD59",
+        backgroundColor:
+          pokemonCtx.allColors.types[data.types[0].type.name]["light"],
         paddingVertical: 5,
         paddingHorizontal: 10,
         borderRadius: 50,

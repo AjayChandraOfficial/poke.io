@@ -75,7 +75,7 @@ export default function RandomPokemon() {
             activeOpacity={0.9}
             onPress={() => {
               navigation.navigate("DetailsScreen", {
-                name: randomPokemondData.name,
+                data: randomPokemondData,
               });
             }}
           >

@@ -4,8 +4,6 @@ import { useContext } from "react";
 import pokemonContext from "../../store/pokemon-context";
 export default function Stats({ data }) {
   const pokemonCtx = useContext(pokemonContext);
-  console.log(data.stats);
-  const initialHeadingsResult = ["Result", "Result"];
 
   const filterString = (str) => {
     if (str.includes("special")) {

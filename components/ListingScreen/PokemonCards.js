@@ -1,12 +1,12 @@
 import React from "react";
-import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
-import { SvgUri } from "react-native-svg";
+import { View, Text, FlatList } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import pokemonContext from "../../store/pokemon-context";
-import LottieView from "lottie-react-native";
 import * as Animatable from "react-native-animatable";
-import PokeioLogoSvg from "../SearchScreen/PokeioLogoSvg";
-import { useNavigation } from "@react-navigation/native";
+import PokemonCard from "./PokemonCard";
+import Error from "./Error";
+import NoPokemonsFound from "./NoPokemonsFound";
+import LottieView from "lottie-react-native";
 export default function PokemonCards(props) {
   const pokemonCtx = useContext(pokemonContext);
   const [pokemonData, setPokemonData] = useState();
@@ -16,6 +16,7 @@ export default function PokemonCards(props) {
   const [loadingMoreData, setLoadingMoreData] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchData = async () => {
       try {
         setIsLoading(true);
@@ -32,6 +33,8 @@ export default function PokemonCards(props) {
       }
     };
     fetchData();
+
+    return () => controller.abort();
   }, []);
 
   const loadMoreData = async () => {
@@ -50,7 +53,6 @@ export default function PokemonCards(props) {
         setPokemonData((prevData) => [...prevData, ...individualData]);
       }
     } catch (e) {
-      console.log(e.message);
       setHasError(true);
     }
   };
@@ -68,6 +70,21 @@ export default function PokemonCards(props) {
   return (
     <>
       <View>
+        {isLoading && (
+          <LottieView
+            source={require("../../assets/animations/lf30_editor_gtcrnw7k.json")}
+            autoPlay
+            loop
+            style={{
+              height: 100,
+              width: 100,
+              position: "absolute",
+              left: "75%",
+              top: "60%",
+              transform: [{ translateX: -100 }],
+            }}
+          />
+        )}
         {hasError && <Error>Something went wrong, Please try again</Error>}
         {!isLoading && pokemonData && !hasError && !props.filteredData && (
           <FlatList
@@ -89,10 +106,6 @@ export default function PokemonCards(props) {
             // ListFooterComponent={() => moreDataLoaderComponent()}
           />
         )}
-        {/* {pokemonCtx.filteredSearchData && (
-          <Text style={{ color: "white" }}>Filtered Data foes here</Text> // ListFooterComponent={() => moreDataLoaderComponent()}
-        )} */}
-
         {props.filteredData && props.filteredData.length >= 1 && (
           <FlatList
             showsVerticalScrollIndicator={false}
@@ -107,22 +120,7 @@ export default function PokemonCards(props) {
           />
         )}
         {props.filteredData && props.filteredData.length === 0 && (
-          <Animatable.View
-            animation="bounceIn"
-            style={{ width: "100%", alignItems: "center", marginTop: 130 }}
-          >
-            <PokeioLogoSvg />
-            <Text
-              style={{
-                color: pokemonCtx.allColors.textColor,
-                fontFamily: "Rubik-SemiBold",
-                fontSize: 16,
-                marginTop: 23,
-              }}
-            >
-              No Pokemons found
-            </Text>
-          </Animatable.View>
+          <NoPokemonsFound />
         )}
       </View>
       {/* Add Loading Animation here */}
@@ -132,7 +130,7 @@ export default function PokemonCards(props) {
           style={{
             position: "absolute",
             left: "36%",
-            bottom: 25,
+            bottom: 30,
             color: "white",
             fontFamily: "Rubik-SemiBold",
             fontSize: 16,
@@ -147,157 +145,3 @@ export default function PokemonCards(props) {
 }
 
 // Add touhable opacity in Pokemon card
-
-const PokemonCard = ({ data, index }) => {
-  const pokemonCtx = useContext(pokemonContext);
-  const navigation = useNavigation();
-  const filterString = (str) => {
-    if (str.includes("-")) {
-      const firstWord = str.split("-")[0];
-      return firstWord;
-    }
-    const firstLetter = str.split("")[0].toUpperCase();
-    const remainingLetters = str.slice(1);
-    return firstLetter + remainingLetters;
-  };
-  // Add card animations here
-
-  return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={() => {
-        navigation.navigate("DetailsScreen", { name: data.name });
-      }}
-      style={{
-        width: "45%",
-        height: 120,
-        backgroundColor: data.type
-          ? pokemonCtx.allColors.types[data.type[0].type.name]["light"]
-          : pokemonCtx.allColors.textColor,
-        borderRadius: 16,
-        paddingTop: 30,
-        marginTop: 80,
-      }}
-    >
-      {data.uri !== null ? (
-        <SvgUri
-          width="100"
-          height="100"
-          uri={data.uri}
-          style={{ position: "absolute", left: 20, top: -50 }}
-        />
-      ) : (
-        <Image
-          source={{ uri: data.png }}
-          style={{
-            width: 120,
-            height: 120,
-            position: "absolute",
-            left: 15,
-            top: -60,
-          }}
-        />
-      )}
-      <View
-        style={{
-          marginRight: 35,
-          marginTop: 20,
-          width: "100%",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text
-          style={{
-            color: "white",
-            fontFamily: "Rubik-Regular",
-            fontSize: 18,
-          }}
-        >
-          {filterString(data.name)}
-        </Text>
-        <View
-          style={{
-            // marginTop: 10,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            {data.type.map((item, i) => (
-              <Text
-                key={data.id + Math.random()}
-                style={{
-                  color: "white",
-                  fontFamily: "Rubik-Bold",
-                  fontSize: 10,
-                  paddingHorizontal: 7,
-                  paddingVertical: 3,
-                  borderRadius: 50,
-                  marginTop: 5,
-                  marginLeft: 2,
-                  backgroundColor: data.type
-                    ? pokemonCtx.allColors.types[data.type[0].type.name]["dark"]
-                    : pokemonCtx.allColors.backgroundColor, //Change texxt color dynamiucally here
-                }}
-              >
-                {filterString(item.type.name)}
-              </Text>
-            ))}
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-const Error = () => {
-  const pokemonCtx = useContext(pokemonContext);
-  return (
-    <View style={{ alignItems: "center", marginTop: 100 }}>
-      <LottieView
-        source={require("../../assets/animations/38213-error.json")}
-        autoPlay
-        loop
-        style={{ height: 100, width: 100 }}
-      />
-
-      <Text
-        style={{
-          color: pokemonCtx.allColors.textColor,
-          fontSize: 16,
-          fontFamily: "Rubik-Regular",
-        }}
-      >
-        Something went wrong,Please try again
-      </Text>
-      <TouchableOpacity
-        activeOpacity={0.7}
-        style={{
-          backgroundColor: pokemonCtx.allColors.textColor,
-          borderRadius: 7,
-          paddingHorizontal: 10,
-          paddingVertical: 5,
-          marginTop: 30,
-        }}
-      >
-        <Text
-          style={{
-            // marginTop: 15,
-            color: pokemonCtx.allColors.backgroundColor,
-            fontSize: 14,
-            fontFamily: "Rubik-Regular",
-          }}
-        >
-          Refresh
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};

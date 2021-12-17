@@ -27,6 +27,7 @@ export default function ListingScreen(props) {
         navigation={props.navigation}
         filteredDataHandler={filteredDataHandler}
       />
+
       <View style={{ marginTop: 20 }}>
         <PokemonCards filteredData={filteredData} />
       </View>

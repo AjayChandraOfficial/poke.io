@@ -4,10 +4,12 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { PokemonContextProvider } from "./store/pokemon-context";
 import ListingScreen from "./screens/ListingScreen";
+import BrowseAllScreen from "./screens/BrowseAllScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { TransitionPresets } from "@react-navigation/stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
+import BookmarkScreen from "./screens/BookmarkScreen";
 import DetailsScreen from "./screens/DetailsScreen";
 import FiltersScreen from "./screens/FiltersScreen";
 export default function App() {
@@ -58,6 +60,16 @@ export default function App() {
           <Stack.Screen
             name="DetailsScreen"
             component={DetailsScreen}
+            options={{ ...TransitionPresets.SlideFromRightIOS }}
+          />
+          <Stack.Screen
+            name="BookmarkScreen"
+            component={BookmarkScreen}
+            options={{ ...TransitionPresets.SlideFromRightIOS }}
+          />
+          <Stack.Screen
+            name="BrowseAll"
+            component={BrowseAllScreen}
             options={{ ...TransitionPresets.SlideFromRightIOS }}
           />
         </Stack.Navigator>

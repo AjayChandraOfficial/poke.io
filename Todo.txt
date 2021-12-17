@@ -1,5 +1,2 @@
-Loading Indicators on pokemon cards loading and details screen loading
-Stats and Movies Details Page
-Local Bookmarks storage
+Add loading on search
 Filters 
-Browse all

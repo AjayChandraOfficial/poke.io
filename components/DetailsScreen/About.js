@@ -21,7 +21,8 @@ export default function About({ data }) {
   };
   const arrayExtractor = (arr) => {
     let str = [];
-    for (const item of arr) {
+    let twoArr = arr.slice(0, 2);
+    for (const item of twoArr) {
       let a = filterString(item.ability.name);
       str.push(a);
     }
@@ -33,7 +34,7 @@ export default function About({ data }) {
     let str = [];
     for (const item of arr) {
       let a = filterString(item.name);
-      console.log(a);
+
       str.push(a);
     }
     return str.join(", ");

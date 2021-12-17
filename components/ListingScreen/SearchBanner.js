@@ -32,7 +32,7 @@ export default function SearchBanner({
 
   useEffect(() => {
     if (!userInputValue) filteredDataHandler();
-    inpoutThrottleTimer = setTimeout(() => {
+    inputThrottleTimer = setTimeout(() => {
       if (userInputValue) {
         const filteredArrayDataFromAllPokemons =
           pokemonCtx.filterDataFromAllPokemons(userInputValue);
@@ -45,7 +45,6 @@ export default function SearchBanner({
               );
             filteredDataHandler(individualData);
           } catch (e) {
-            console.log(e.message);
             setHasError(true);
           }
         };
@@ -53,7 +52,7 @@ export default function SearchBanner({
       }
     }, 300);
 
-    return () => clearTimeout(inpoutThrottleTimer);
+    return () => clearTimeout(inputThrottleTimer);
   }, [userInputValue]);
   // useEffect(() => {
   //   pokemonCtx.filterDataToArray(userInputValue);

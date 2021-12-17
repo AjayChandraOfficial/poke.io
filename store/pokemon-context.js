@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { createContext, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const pokemonContext = createContext({
   allColors: {},
@@ -14,6 +15,7 @@ const pokemonContext = createContext({
 export const PokemonContextProvider = ({ children }) => {
   const maxPokemons = 898;
   const [allPokemonsData, setAllPokemonsData] = useState();
+  const [allofflineData, setAllOfflineData] = useState(null);
 
   //Edit all the colors here
   const allColors = {
@@ -126,7 +128,28 @@ export const PokemonContextProvider = ({ children }) => {
     };
     fetchAllPokemonData();
   }, []);
-
+  const getOfflineData = async (name) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(name);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+  const getAllOfflineData = async () => {
+    try {
+      // await AsyncStorage.clear(); To clear all offline data
+      const keys = await AsyncStorage.getAllKeys();
+      const result = await AsyncStorage.multiGet(keys);
+      let parsedData = [];
+      for (const item of result) {
+        parsedData.push(JSON.parse(item[1]));
+      }
+      setAllOfflineData(parsedData);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
   const filterDataFromAllPokemons = (value) => {
     if (allPokemonsData) {
       // return "I will run after 1 seconds";
@@ -134,6 +157,9 @@ export const PokemonContextProvider = ({ children }) => {
         item.name.startsWith(value.toLowerCase())
       );
     }
+  };
+  const removeOfflineDataHandler = () => {
+    getAllOfflineData();
   };
 
   const pokemonContextValue = {
@@ -143,6 +169,10 @@ export const PokemonContextProvider = ({ children }) => {
     allPokemonsData: allPokemonsData, //Array containing all the pokemons names and url
     filterDataFromAllPokemons: filterDataFromAllPokemons, //Filters from all pokemons based on substring
     fetchIndividualFilteredPokemons: fetchIndividualFilteredPokemons, //Fetches data of individual filtered pokemons from an array
+    getOfflineData: getOfflineData, //Get data from local storage
+    getAllOfflineData: getAllOfflineData,
+    allofflineData: allofflineData,
+    removeOfflineDataHandler: removeOfflineDataHandler,
   };
 
   return (
