@@ -19,6 +19,7 @@ export default function SearchBanner({
   item,
   navigation,
   filteredDataHandler,
+  isLoadingSearchHandler,
 }) {
   const pokemonCtx = useContext(pokemonContext);
 
@@ -32,6 +33,7 @@ export default function SearchBanner({
 
   useEffect(() => {
     if (!userInputValue) filteredDataHandler();
+
     inputThrottleTimer = setTimeout(() => {
       if (userInputValue) {
         const filteredArrayDataFromAllPokemons =
@@ -39,10 +41,12 @@ export default function SearchBanner({
 
         const loadData = async () => {
           try {
+            isLoadingSearchHandler(true);
             const individualData =
               await pokemonCtx.fetchIndividualFilteredPokemons(
                 filteredArrayDataFromAllPokemons
               );
+            isLoadingSearchHandler(false);
             filteredDataHandler(individualData);
           } catch (e) {
             setHasError(true);

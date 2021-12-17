@@ -22,7 +22,7 @@ export default function Stats({ data }) {
 
   const barFillCalculator = (value) => {
     let max = 120;
-    if (value >= 120) return "100%";
+    if (value >= 115) return "100%";
     return `${Math.trunc((value / max) * 100)}%`;
   };
   const barFillColorCalculator = (value) => {

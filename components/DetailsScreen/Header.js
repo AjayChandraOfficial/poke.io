@@ -53,10 +53,10 @@ export default function Header({ data }) {
         const parsedData = await pokemonCtx.getOfflineData(
           `${data.species.name}`
         );
-        console.log(parsedData.name, data.name);
-        if (parsedData.name === data.name) {
-          setBookmarked(true);
-        }
+        if (parsedData)
+          if (parsedData.name === data.name) {
+            setBookmarked(true);
+          }
       } catch (e) {
         console.log(e.message);
       }

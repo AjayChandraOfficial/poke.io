@@ -4825,6 +4825,11 @@ react-native-animatable@^1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-bouncy-checkbox@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/react-native-bouncy-checkbox/-/react-native-bouncy-checkbox-2.1.8.tgz#4586976a6909af92ff83e4a7b09ee587652138ac"
+  integrity sha512-MQ8LkP4+zFW7QYOSnW/zPTgoOz6RQRY1IJBOMjT/Zr/bMwMbO4IY79jE6hQc/4rRsCSWDOdH9VVzUWkw47sgYw==
+
 react-native-codegen@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.0.6.tgz#b3173faa879cf71bfade8d030f9c4698388f6909"

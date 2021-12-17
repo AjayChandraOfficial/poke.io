@@ -8,11 +8,13 @@ import pokemonContext from "../store/pokemon-context";
 export default function ListingScreen(props) {
   const pokemonCtx = useContext(pokemonContext);
   const [filteredData, setFilteredData] = useState();
-
+  const [isloadingSearchData, setIsLoadingSearchData] = useState(false);
   const filteredDataHandler = (data = undefined) => {
     setFilteredData(data);
   };
-
+  const isLoadingSearchHandler = (value) => {
+    setIsLoadingSearchData(value);
+  };
   return (
     <View
       style={{
@@ -26,10 +28,14 @@ export default function ListingScreen(props) {
         item={props.route.params.item}
         navigation={props.navigation}
         filteredDataHandler={filteredDataHandler}
+        isLoadingSearchHandler={isLoadingSearchHandler}
       />
 
       <View style={{ marginTop: 20 }}>
-        <PokemonCards filteredData={filteredData} />
+        <PokemonCards
+          filteredData={filteredData}
+          isloadingSearchData={isloadingSearchData}
+        />
       </View>
       <StatusBar style="light" />
     </View>

@@ -24,24 +24,25 @@ export const PokemonContextProvider = ({ children }) => {
     lightModeTextColor: "#0D1323",
     lightModeBackgroundColor: "#C8CCDA",
     types: {
-      grass: { light: "#6AAD59", dark: "#508243" },
-      fire: { light: "#D76B6B", dark: "#A74343" },
-      water: { light: "#4C9AA5", dark: "#2A6B74" },
+      grass: { light: "#6AAD59", dark: "#508243" }, //
+      fire: { light: "#D76B6B", dark: "#A74343" }, //
+      water: { light: "#4C9AA5", dark: "#2A6B74" }, //
       electric: { light: "#DDB03D", dark: "#A67F19" },
-      normal: { light: "#A8A778", dark: "#79784B" },
-      ice: { light: "#91BCB9", dark: "#457471" },
-      fighting: { light: "#B84B44", dark: "#78312C" },
-      poison: { light: "#C05CC0", dark: "#793879" },
-      ground: { light: "#99774C", dark: "#6D4F28" },
-      flying: { light: "#9283AB", dark: "#63557A" },
-      psychic: { light: "#E06B8E", dark: "#A8506A" },
-      bug: { light: "#978655", dark: "#625737" },
-      rock: { light: "#737373", dark: "#4B4B4B" },
-      ghost: { light: "#705898", dark: "#493963" },
-      dark: { light: "#463743", dark: "#2D242C" },
-      dragon: { light: "#7F5CD6", dark: "#533C8B" },
-      steel: { light: "#9D9398", dark: "#666063" },
+      normal: { light: "#A8A778", dark: "#79784B" }, //
+      ice: { light: "#91BCB9", dark: "#457471" }, //
+      fighting: { light: "#B84B44", dark: "#78312C" }, //
+      poison: { light: "#C05CC0", dark: "#793879" }, //
+      ground: { light: "#99774C", dark: "#6D4F28" }, //
+      flying: { light: "#9283AB", dark: "#63557A" }, //
+      psychic: { light: "#E06B8E", dark: "#A8506A" }, //
+      bug: { light: "#978655", dark: "#625737" }, //
+      rock: { light: "#737373", dark: "#4B4B4B" }, //
+      ghost: { light: "#705898", dark: "#493963" }, //
+      dark: { light: "#463743", dark: "#2D242C" }, //
+      dragon: { light: "#7F5CD6", dark: "#533C8B" }, //
+      steel: { light: "#9D9398", dark: "#666063" }, //
       fairy: { light: "#D4939A", dark: "#8A6064" },
+      shadow: { light: "#68A090", dark: "#44685E" },
       unknown: { light: "#68A090", dark: "#44685E" },
     },
   };

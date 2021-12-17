@@ -55,7 +55,7 @@ export default function App() {
           <Stack.Screen
             name="FiltersScreen"
             component={FiltersScreen}
-            options={{ ...TransitionPresets.FadeFromBottomAndroid }}
+            options={{ ...TransitionPresets.SlideFromRightIOS }}
           />
           <Stack.Screen
             name="DetailsScreen"

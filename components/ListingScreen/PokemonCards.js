@@ -70,7 +70,7 @@ export default function PokemonCards(props) {
   return (
     <>
       <View>
-        {isLoading && (
+        {(isLoading || props.isloadingSearchData) && (
           <LottieView
             source={require("../../assets/animations/lf30_editor_gtcrnw7k.json")}
             autoPlay
@@ -86,39 +86,45 @@ export default function PokemonCards(props) {
           />
         )}
         {hasError && <Error>Something went wrong, Please try again</Error>}
-        {!isLoading && pokemonData && !hasError && !props.filteredData && (
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={pokemonData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            key={2}
-            numColumns={2}
-            columnWrapperStyle={{ justifyContent: "space-between" }}
-            contentContainerStyle={{ paddingBottom: 80 }}
-            onEndReachedThreshold={0}
-            onEndReached={({ distanceFromEnd }) => {
-              if (loadingMoreData === false) {
-                loadMoreData();
-              }
-            }}
-            removeClippedSubviews={true}
-            // ListFooterComponent={() => moreDataLoaderComponent()}
-          />
-        )}
-        {props.filteredData && props.filteredData.length >= 1 && (
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={transformedData()}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            key={2}
-            numColumns={2}
-            columnWrapperStyle={{ justifyContent: "space-between" }}
-            contentContainerStyle={{ paddingBottom: 80 }}
-            onEndReachedThreshold={0}
-          />
-        )}
+        {!isLoading &&
+          pokemonData &&
+          !hasError &&
+          !props.filteredData &&
+          !props.isloadingSearchData && (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={pokemonData}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+              key={2}
+              numColumns={2}
+              columnWrapperStyle={{ justifyContent: "space-between" }}
+              contentContainerStyle={{ paddingBottom: 80 }}
+              onEndReachedThreshold={0}
+              onEndReached={({ distanceFromEnd }) => {
+                if (loadingMoreData === false) {
+                  loadMoreData();
+                }
+              }}
+              removeClippedSubviews={true}
+              // ListFooterComponent={() => moreDataLoaderComponent()}
+            />
+          )}
+        {props.filteredData &&
+          props.filteredData.length >= 1 &&
+          !props.isloadingSearchData && (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={transformedData()}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+              key={2}
+              numColumns={2}
+              columnWrapperStyle={{ justifyContent: "space-between" }}
+              contentContainerStyle={{ paddingBottom: 80 }}
+              onEndReachedThreshold={0}
+            />
+          )}
         {props.filteredData && props.filteredData.length === 0 && (
           <NoPokemonsFound />
         )}

@@ -1,2 +1,2 @@
-Add loading on search
+Check android emulator
 Filters 
