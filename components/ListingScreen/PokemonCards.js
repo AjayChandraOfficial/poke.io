@@ -16,17 +16,20 @@ export default function PokemonCards(props) {
   const [loadingMoreData, setLoadingMoreData] = useState(false);
 
   useEffect(() => {
-    const controller = new AbortController();
+    let unmounted = false;
     const fetchData = async () => {
       try {
-        setIsLoading(true);
-        const data = await pokemonCtx.fetchPokemonsWithLimitOffset(10, 0);
-        setNextFetch(data.next);
-        if (data.results.length === 0) throw new Error("Something went wrong");
-        const individualData = await pokemonCtx.fetchIndividualPokemons(data);
-        setIsLoading(false);
-        if (individualData) {
-          setPokemonData(individualData);
+        if (!unmounted) {
+          setIsLoading(true);
+          const data = await pokemonCtx.fetchPokemonsWithLimitOffset(10, 0);
+          setNextFetch(data.next);
+          if (data.results.length === 0)
+            throw new Error("Something went wrong");
+          const individualData = await pokemonCtx.fetchIndividualPokemons(data);
+          setIsLoading(false);
+          if (individualData) {
+            setPokemonData(individualData);
+          }
         }
       } catch (e) {
         setHasError(true);
@@ -34,7 +37,9 @@ export default function PokemonCards(props) {
     };
     fetchData();
 
-    return () => controller.abort();
+    return () => {
+      unmounted = true;
+    };
   }, []);
 
   const loadMoreData = async () => {
@@ -71,19 +76,24 @@ export default function PokemonCards(props) {
     <>
       <View>
         {(isLoading || props.isloadingSearchData) && (
-          <LottieView
-            source={require("../../assets/animations/lf30_editor_gtcrnw7k.json")}
-            autoPlay
-            loop
+          <View
             style={{
-              height: 100,
-              width: 100,
-              position: "absolute",
-              left: "75%",
-              top: "60%",
-              transform: [{ translateX: -100 }],
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 50,
             }}
-          />
+          >
+            <LottieView
+              source={require("../../assets/animations/lf30_editor_gtcrnw7k.json")}
+              autoPlay
+              loop
+              style={{
+                height: 100,
+                width: 100,
+              }}
+            />
+          </View>
         )}
         {hasError && <Error>Something went wrong, Please try again</Error>}
         {!isLoading &&

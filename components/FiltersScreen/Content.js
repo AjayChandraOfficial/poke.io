@@ -1,17 +1,20 @@
 import React, { useEffect, useState, useContext } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-} from "react-native";
-
+import { View, Text, ScrollView } from "react-native";
+import LottieView from "lottie-react-native";
 import pokemonContext from "../../store/pokemon-context";
-
+import { useNavigation } from "@react-navigation/native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-export default function Content() {
+export default function Content({ pressedDone }) {
   const [allFiters, setAllFilters] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [typeCheckedData, setTypeCheckedData] = useState([]);
+  const [eggCheckedData, setEggCheckedData] = useState([]);
+  const [generationCheckedData, setGenerationCheckedData] = useState([]);
+  const [colorCheckedData, setColorCheckedData] = useState([]);
+  const [habitatCheckedData, setHabitatCheckedData] = useState([]);
+  const [shapeCheckedData, setShapeCheckedData] = useState([]);
+
   const categories = [
     "type",
     "egg-group",
@@ -21,37 +24,32 @@ export default function Content() {
     "pokemon-shape",
   ];
   useEffect(() => {
+    let unmounted = false;
     const fetchTypes = async (categories) => {
       try {
-        let dataArr = [];
-        for (let item of categories) {
-          let response = await fetch(`https://pokeapi.co/api/v2/${item}`);
-          let data = await response.json();
-          dataArr.push(data);
+        if (!unmounted) {
+          setIsLoading(true);
+          let dataArr = [];
+          for (let item of categories) {
+            let response = await fetch(`https://pokeapi.co/api/v2/${item}`);
+            let data = await response.json();
+            dataArr.push(data);
+          }
+          setAllFilters(dataArr);
+          setIsLoading(false);
+          if (dataArr.length === 0) throw new Error("Error occured");
         }
-        setAllFilters(dataArr);
-        // const eggResponse = await fetch("https://pokeapi.co/api/v2/");
-        // const eggData = await response.json();
-        // const natureResponse = await fetch("https://pokeapi.co/api/v2/");
-        // const natureData = await response.json();
-
-        // const colorResponse = await fetch("https://pokeapi.co/api/v2/");
-        // const colorData = await response.json();
-        // const habitatResponse = await fetch("https://pokeapi.co/api/v2/");
-        // const habitatData = await response.json();
-        // const shapeResponse = await fetch("https://pokeapi.co/api/v2/");
-        // const shapeData = await response.json();
-        // const colorData = await response.json();
-        if (dataArr.length === 0) throw new Error("Error occured");
       } catch (e) {
         console.log(e.message);
       }
     };
     fetchTypes(categories);
+
+    return () => {
+      unmounted = true;
+    };
   }, []);
-  useEffect(() => {
-    if (allFiters) console.log(allFiters);
-  }, [allFiters]);
+
   const pokemonCtx = useContext(pokemonContext);
   const filterString = (str) => {
     if (str.startsWith("generation")) {
@@ -70,6 +68,37 @@ export default function Content() {
     return firstLetter + remainingLetters;
   };
 
+  if (pressedDone) {
+    console.log([
+      typeCheckedData,
+      eggCheckedData,
+      generationCheckedData,
+      colorCheckedData,
+      habitatCheckedData,
+      shapeCheckedData,
+    ]);
+  }
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <LottieView
+          source={require("../../assets/animations/lf30_editor_gtcrnw7k.json")}
+          autoPlay
+          loop
+        />
+        <Text
+          style={{
+            color: pokemonCtx.allColors.textColor,
+            fontFamily: "Rubik-SemiBold",
+            fontSize: 16,
+            marginTop: 80,
+          }}
+        >
+          Loading
+        </Text>
+      </View>
+    );
+  }
   return (
     <View style={{ paddingHorizontal: 10, flex: 1 }}>
       <ScrollView
@@ -112,7 +141,18 @@ export default function Content() {
                       fontSize: 17,
                       marginTop: 14,
                     }}
-                    onPress={(isChecked) => {}}
+                    onPress={(isChecked) => {
+                      isChecked
+                        ? setTypeCheckedData((prevState) => [
+                            ...prevState,
+                            { name: item.name },
+                          ])
+                        : setTypeCheckedData((prevState) => {
+                            return prevState.filter(
+                              (pItem) => pItem.name !== item.name
+                            );
+                          });
+                    }}
                   />
                 ))}
             </View>
@@ -149,7 +189,18 @@ export default function Content() {
                       fontSize: 17,
                       marginTop: 14,
                     }}
-                    onPress={(isChecked) => {}}
+                    onPress={(isChecked) => {
+                      isChecked
+                        ? setGenerationCheckedData((prevState) => [
+                            ...prevState,
+                            { name: item.name },
+                          ])
+                        : setGenerationCheckedData((prevState) => {
+                            return prevState.filter(
+                              (pItem) => pItem.name !== item.name
+                            );
+                          });
+                    }}
                   />
                 ))}
             </View>
@@ -186,7 +237,18 @@ export default function Content() {
                       fontSize: 17,
                       marginTop: 14,
                     }}
-                    onPress={(isChecked) => {}}
+                    onPress={(isChecked) => {
+                      isChecked
+                        ? setHabitatCheckedData((prevState) => [
+                            ...prevState,
+                            { name: item.name },
+                          ])
+                        : setHabitatCheckedData((prevState) => {
+                            return prevState.filter(
+                              (pItem) => pItem.name !== item.name
+                            );
+                          });
+                    }}
                   />
                 ))}
             </View>
@@ -227,7 +289,18 @@ export default function Content() {
                       fontSize: 17,
                       marginTop: 14,
                     }}
-                    onPress={(isChecked) => {}}
+                    onPress={(isChecked) => {
+                      isChecked
+                        ? setEggCheckedData((prevState) => [
+                            ...prevState,
+                            { name: item.name },
+                          ])
+                        : setEggCheckedData((prevState) => {
+                            return prevState.filter(
+                              (pItem) => pItem.name !== item.name
+                            );
+                          });
+                    }}
                   />
                 ))}
             </View>
@@ -244,7 +317,7 @@ export default function Content() {
                 Color
               </Text>
               {allFiters &&
-                allFiters[4].results.map((item) => (
+                allFiters[3].results.map((item) => (
                   <BouncyCheckbox
                     key={item.name}
                     size={20}
@@ -264,7 +337,18 @@ export default function Content() {
                       fontSize: 17,
                       marginTop: 14,
                     }}
-                    onPress={(isChecked) => {}}
+                    onPress={(isChecked) => {
+                      isChecked
+                        ? setColorCheckedData((prevState) => [
+                            ...prevState,
+                            { name: item.name },
+                          ])
+                        : setColorCheckedData((prevState) => {
+                            return prevState.filter(
+                              (pItem) => pItem.name !== item.name
+                            );
+                          });
+                    }}
                   />
                 ))}
             </View>
@@ -301,7 +385,18 @@ export default function Content() {
                       fontSize: 17,
                       marginTop: 14,
                     }}
-                    onPress={(isChecked) => {}}
+                    onPress={(isChecked) => {
+                      isChecked
+                        ? setShapeCheckedData((prevState) => [
+                            ...prevState,
+                            { name: item.name },
+                          ])
+                        : setShapeCheckedData((prevState) => {
+                            return prevState.filter(
+                              (pItem) => pItem.name !== item.name
+                            );
+                          });
+                    }}
                   />
                 ))}
             </View>

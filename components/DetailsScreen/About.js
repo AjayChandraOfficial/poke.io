@@ -49,18 +49,24 @@ export default function About({ data }) {
   const eggInfoHeadings = ["Egg Groups", "Shape", "Generation", "Color"];
   useEffect(() => {
     const fetchData = async () => {
+      let unmounted = false;
       try {
-        const dataResponse = await fetch(
-          `https://pokeapi.co/api/v2/pokemon-species/${data.id}/`
-        );
-        const jsonData = await dataResponse.json();
-        if (!dataResponse) throw new Error("Something went wrong");
-        setEggInfoDataAPI(jsonData);
+        if (!unmounted) {
+          const dataResponse = await fetch(
+            `https://pokeapi.co/api/v2/pokemon-species/${data.id}/`
+          );
+          const jsonData = await dataResponse.json();
+          if (!dataResponse) throw new Error("Something went wrong");
+          setEggInfoDataAPI(jsonData);
+        }
       } catch (e) {
         console.log(e.message);
       }
     };
     fetchData();
+    return () => {
+      unmounted = true;
+    };
   }, []);
 
   useEffect(() => {

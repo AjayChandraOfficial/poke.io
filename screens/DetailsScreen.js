@@ -15,21 +15,27 @@ export default function DetailsScreen({ route }) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   useEffect(() => {
+    let unmounted = false;
     const fetchData = async () => {
       try {
-        setIsLoading(true);
-        const dataResponse = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${route.params.data.name}/`
-        );
-        const jsonData = await dataResponse.json();
-        if (!dataResponse) throw new Error("Something went wrong");
-        setData(jsonData);
-        setIsLoading(false);
+        if (!unmounted) {
+          setIsLoading(true);
+          const dataResponse = await fetch(
+            `https://pokeapi.co/api/v2/pokemon/${route.params.data.name}/`
+          );
+          const jsonData = await dataResponse.json();
+          if (!dataResponse) throw new Error("Something went wrong");
+          setData(jsonData);
+          setIsLoading(false);
+        }
       } catch (e) {
         setHasError(true);
       }
     };
     fetchData();
+    return () => {
+      unmounted = true;
+    };
   }, []);
   if (isLoading) {
     return (

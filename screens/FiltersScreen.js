@@ -6,18 +6,22 @@ import pokemonContext from "../store/pokemon-context";
 import { useNavigation } from "@react-navigation/native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import Content from "../components/FiltersScreen/Content";
+import { useState } from "react";
 export default function FiltersScreen() {
   const pokemonCtx = useContext(pokemonContext);
-
+  const [pressedDone, setPressedDone] = useState(false);
+  const PressedDoneHandler = () => {
+    setPressedDone(true);
+  };
   return (
     <View style={{ flex: 1, paddingHorizontal: 15, paddingTop: 60 }}>
-      <Header />
-      <Content />
+      <Header PressedDoneHandler={PressedDoneHandler} />
+      <Content pressedDone={pressedDone} />
     </View>
   );
 }
 
-const Header = () => {
+const Header = ({ PressedDoneHandler }) => {
   const pokemonCtx = useContext(pokemonContext);
   const navigation = useNavigation();
   return (
@@ -52,7 +56,10 @@ const Header = () => {
           Filters
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.8}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => PressedDoneHandler()}
+      >
         <Text
           style={{
             color: pokemonCtx.allColors.textColor,
