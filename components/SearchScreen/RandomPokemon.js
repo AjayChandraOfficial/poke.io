@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { SvgUri } from "react-native-svg";
 import SkeletonContent from "react-native-skeleton-content";
-
+import { useNavigation } from "@react-navigation/native";
 import pokemonContext from "../../store/pokemon-context";
 import { useContext } from "react";
 
 // Fetch a random pokemon using Math.random() for id between 1-1000
 export default function RandomPokemon() {
+  const navigation = useNavigation();
   const pokemonCtx = useContext(pokemonContext);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -70,7 +71,14 @@ export default function RandomPokemon() {
       )}
       {!isLoading && (
         <View>
-          <TouchableOpacity activeOpacity={0.9}>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => {
+              navigation.navigate("DetailsScreen", {
+                name: randomPokemondData.name,
+              });
+            }}
+          >
             <PokemonCard data={randomPokemondData} />
           </TouchableOpacity>
         </View>

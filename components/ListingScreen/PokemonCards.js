@@ -6,6 +6,7 @@ import pokemonContext from "../../store/pokemon-context";
 import LottieView from "lottie-react-native";
 import * as Animatable from "react-native-animatable";
 import PokeioLogoSvg from "../SearchScreen/PokeioLogoSvg";
+import { useNavigation } from "@react-navigation/native";
 export default function PokemonCards(props) {
   const pokemonCtx = useContext(pokemonContext);
   const [pokemonData, setPokemonData] = useState();
@@ -126,19 +127,20 @@ export default function PokemonCards(props) {
       </View>
       {/* Add Loading Animation here */}
       {loadingMoreData && (
-        <Text
+        <Animatable.Text
+          animation="bounceIn"
           style={{
             position: "absolute",
-            left: 30,
+            left: "36%",
             bottom: 25,
             color: "white",
             fontFamily: "Rubik-SemiBold",
             fontSize: 16,
-            transform: [{ translateX: 100 }],
+            // transform: [{ translateX: 100 }],
           }}
         >
           Loading...
-        </Text>
+        </Animatable.Text>
       )}
     </>
   );
@@ -148,6 +150,7 @@ export default function PokemonCards(props) {
 
 const PokemonCard = ({ data, index }) => {
   const pokemonCtx = useContext(pokemonContext);
+  const navigation = useNavigation();
   const filterString = (str) => {
     if (str.includes("-")) {
       const firstWord = str.split("-")[0];
@@ -160,7 +163,11 @@ const PokemonCard = ({ data, index }) => {
   // Add card animations here
 
   return (
-    <Animatable.View
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => {
+        navigation.navigate("DetailsScreen", { name: data.name });
+      }}
       style={{
         width: "45%",
         height: 120,
@@ -201,7 +208,11 @@ const PokemonCard = ({ data, index }) => {
         }}
       >
         <Text
-          style={{ color: "white", fontFamily: "Rubik-Regular", fontSize: 18 }}
+          style={{
+            color: "white",
+            fontFamily: "Rubik-Regular",
+            fontSize: 18,
+          }}
         >
           {filterString(data.name)}
         </Text>
@@ -242,7 +253,7 @@ const PokemonCard = ({ data, index }) => {
           </View>
         </View>
       </View>
-    </Animatable.View>
+    </TouchableOpacity>
   );
 };
 

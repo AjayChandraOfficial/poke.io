@@ -12,7 +12,7 @@ export default function ListingScreen(props) {
   const filteredDataHandler = (data = undefined) => {
     setFilteredData(data);
   };
-  console.log(filteredData);
+
   return (
     <View
       style={{

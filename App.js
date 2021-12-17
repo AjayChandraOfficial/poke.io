@@ -8,6 +8,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { TransitionPresets } from "@react-navigation/stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
+import DetailsScreen from "./screens/DetailsScreen";
 import FiltersScreen from "./screens/FiltersScreen";
 export default function App() {
   const [allFontsLoaded] = useFonts({
@@ -20,6 +21,7 @@ export default function App() {
   if (!allFontsLoaded) return <AppLoading />;
 
   const Stack = createSharedElementStackNavigator();
+
   return (
     <PokemonContextProvider>
       <NavigationContainer
@@ -44,14 +46,19 @@ export default function App() {
             name="ListingPage"
             component={ListingScreen}
             options={{ ...TransitionPresets.FadeFromBottomAndroid }}
-            sharedElements={(route) => {
-              return [route.params.item.id];
-            }}
+            // sharedElements={(route) => {
+            //   return [route.params.item.id];
+            // }}
           />
           <Stack.Screen
             name="FiltersScreen"
             component={FiltersScreen}
             options={{ ...TransitionPresets.FadeFromBottomAndroid }}
+          />
+          <Stack.Screen
+            name="DetailsScreen"
+            component={DetailsScreen}
+            options={{ ...TransitionPresets.SlideFromRightIOS }}
           />
         </Stack.Navigator>
       </NavigationContainer>

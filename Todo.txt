@@ -1,5 +1,5 @@
-Add loading animatiojn on pokemon cards
-Search feature
-Filters feature
-Card Details feature
-Bookmarks with local storage feature
+Loading Indicators on pokemon cards loading and details screen loading
+Stats and Movies Details Page
+Local Bookmarks storage
+Filters 
+Browse all
