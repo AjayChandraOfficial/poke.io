@@ -95,7 +95,7 @@ export default function PokemonCards(props) {
             />
           </View>
         )}
-        {hasError && <Error>Something went wrong, Please try again</Error>}
+        {hasError && <Error />}
         {!isLoading &&
           pokemonData &&
           !hasError &&

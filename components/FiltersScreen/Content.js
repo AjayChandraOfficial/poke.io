@@ -126,23 +126,27 @@ export default function Content({ pressedDone, PressedDoneHandler }) {
   }, [filteredPageData]);
   useEffect(() => {
     if (pressedDone) {
+      let unmounted = false;
       const fetchFiltered = async () => {
-        PressedDoneHandler(false);
-        try {
-          // setFilteredPagePokemonDataLoading(true);
-          const filteredData = await pokemonCtx.getFilteredPagePokemonData(
-            MakeObjectFromFiltersData()
-          );
-          const filteredDataMoreInfo =
-            await pokemonCtx.fetchIndividualFilteredPokemons(filteredData);
-          // setFilteredPagePokemonDataLoading(false);
-          setFilteredPageData(filteredDataMoreInfo);
-        } catch (e) {
-          console.log(e.message);
+        if (!unmounted) {
+          PressedDoneHandler(false);
+          try {
+            // setFilteredPagePokemonDataLoading(true);
+            const filteredData = await pokemonCtx.getFilteredPagePokemonData(
+              MakeObjectFromFiltersData()
+            );
+            const filteredDataMoreInfo =
+              await pokemonCtx.fetchIndividualFilteredPokemons(filteredData);
+            // setFilteredPagePokemonDataLoading(false);
+            setFilteredPageData(filteredDataMoreInfo);
+          } catch (e) {
+            console.log(e.message);
+          }
         }
       };
       fetchFiltered();
     }
+    return () => (unmounted = true);
   }, [pressedDone]);
   if (isLoading) {
     return (
